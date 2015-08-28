@@ -48,13 +48,11 @@ that reach it and at which term they reach it.
 """
 function collatz_reverse(n::Int64)
   reverse_at = Dict{Int64,Array{Int64}}()
-  for i in 1:n
-    for (i_j, j) in enumerate(collatz(n))
-      if ~(j in reverse_at.keys)
-        reverse_at[j] = Int64[i_j, i]
-      else
-        append!(reverse_at[j], [i_j, i])
-      end
+  for i in 1:n, (i_j, j) in enumerate(collatz(i))
+    if j in reverse_at.keys
+      append!(reverse_at[j], [i_j, i])
+    else
+      reverse_at[j] = Int64[i_j, i]
     end
   end
   reverse_at
