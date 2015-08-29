@@ -38,6 +38,9 @@ def collatz_repeat(n):
                 break
     return result
 
+def reverse_pattern(n):
+    return map(lambda x: {x:collatz_reverse(x)[x]}, filter(lambda x: x <= n,
+                                                           collatz(n)))
 
 def collatz_reverse(n):
     """
@@ -45,13 +48,20 @@ def collatz_reverse(n):
     that reach it and at which term they reach it.
     """
     reverse_at = {}
-    for i in range(1, n+1):
-        for i_j, j in enumerate(collatz(i), start=1):
-            if j not in reverse_at:
-                reverse_at[j] = [i_j, i]
-            else:
-                reverse_at[j].extend([i_j, i])
+    for seed in range(1, n+1):
+        for term, val in enumerate(collatz(seed), start=1):
+            if val not in reverse_at:
+                reverse_at[val] = [seed, term]
+            elif seed <= val:
+                reverse_at[val].extend([seed, term])
     return reverse_at
+
+def collatz_reverse_filtered(n):
+    return {k:v for k,v in collatz_reverse(n).items() if (k % 12 == 7) or (k % 12 == 3)}
+
+
+def reverse_pprint(n):
+    print("\n".join(str(reverse_pattern(n)).split('},')))
 
 def annotate_collatz_repeat(d):
     """
