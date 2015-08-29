@@ -39,10 +39,10 @@ def collatz_repeat(n):
     return result
 
 def reverse_pattern(n):
-    return map(lambda x: {x:collatz_reverse(x)[x]}, filter(lambda x: x <= n,
-                                                           collatz(n)))
+    return map(lambda x: {x:collatz_reverse(x, ceil=n)[x]},
+               collatz(n))
 
-def collatz_reverse(n):
+def collatz_reverse(n, ceil=False):
     """
     For each numbers reached by a collatz sequence up to n, track all seeds
     that reach it and at which term they reach it.
@@ -52,7 +52,9 @@ def collatz_reverse(n):
         for term, val in enumerate(collatz(seed), start=1):
             if val not in reverse_at:
                 reverse_at[val] = [seed, term]
-            elif seed <= val:
+            elif ceil and (seed <= ceil):
+                reverse_at[val].extend([seed, term])
+            elif (not ceil) and (seed <= val):
                 reverse_at[val].extend([seed, term])
     return reverse_at
 
@@ -82,5 +84,10 @@ def print_collatz_repeat(d):
 
 
 if __name__ == "__main__":
-    print_collatz_repeat(collatz_reverse(1300))
-    # print(annotate_collatz_repeat(collatz_repeat(20)))
+    print('----- 3 mod 12 -----')
+    for i in range(10):
+        reverse_pprint(12*i+3)
+    print()
+    print('----- 7 mod 12 -----')
+    for i in range(10):
+        reverse_pprint(12*i+7)
