@@ -39,8 +39,19 @@ def collatz_repeat(n):
     return result
 
 def reverse_pattern(n):
-    return map(lambda x: {x:collatz_reverse(x, ceil=n)[x]},
+    _mapped = map(lambda x: {x:collatz_reverse(x, ceil=n)[x]},
                collatz(n))
+    dicts = []
+    first = _mapped[0].keys()[0]
+    for d in _mapped:
+        if d.keys()[0] >= first:
+            dicts.append(d)
+        else:
+            dicts.append(d)
+            dicts.append({'--':'-----------'})
+            break
+    return dicts
+
 
 def collatz_reverse(n, ceil=False):
     """
@@ -85,9 +96,9 @@ def print_collatz_repeat(d):
 
 if __name__ == "__main__":
     print('----- 3 mod 12 -----')
-    for i in range(10):
+    for i in range(20):
         reverse_pprint(12*i+3)
     print()
     print('----- 7 mod 12 -----')
-    for i in range(10):
+    for i in range(20):
         reverse_pprint(12*i+7)
