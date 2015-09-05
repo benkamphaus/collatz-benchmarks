@@ -1,18 +1,27 @@
+memo = {}
+
 def collatz(n):
     """
     Generate the collatz sequence starting at n. Terminates at 1 instead of
-    iterating through the trivial cycle.
+    iterating through the trivial cycle. Updated to use memoization.
     """
+    global memo
+    if n in memo:
+        return memo[n]
     seq = [n]
+    last = seq[-1]
     while True:
-        if not (n % 2):
-            seq.append(n / 2)
+        if last in memo:
+            memo[n] = seq + memo[last]
+            return memo[n]
+        elif (last % 2):
+            seq.append(last*3 + 1)
         else:
-            seq.append(n*3 + 1)
-        n = seq[-1]
-        if n == 1:
-            break
-    return seq
+            seq.append(last / 2)
+        last = seq[-1]
+        if last == 1:
+            memo[n] = seq
+            return seq
 
 
 def collatz_repeat(n):
